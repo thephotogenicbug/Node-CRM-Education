@@ -101,6 +101,18 @@ app.post("/savecustomerdata", function(req,res){
     })
 })
 
+app.post("/updatecustomer", function(req,res){
+    var feedback    = req.body.cfeedback;
+    // var oldfeedback = req.body.coldfeedback;
+    var id          = req.body.cid;
+    var  sql = "update customer set feedback='"+feedback+"'  where cid='"+id+"' ";
+    mydatabase.query(sql, function(error, rows, fields){
+        if(error) throw error
+        res.send(feedback +": Data updated Successfully  !");
+        res.end();
+    })
+})
+
 
 // app.get("/employeedata", function(req,res){
 //    mydatabase.query('select * from employee', function(error, rows, fields){
