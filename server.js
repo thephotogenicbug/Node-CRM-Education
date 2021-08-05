@@ -69,6 +69,15 @@ app.post("/customerdata", function(req,res){
 // })
 
 
+app.get("/getdata", function(req,res){
+    var sql = "select * from customer order by cid desc";
+    mydatabase.query(sql, function(error, rows,fields){
+        if(error) throw error
+        res.send(rows);
+        res.end();
+    })
+})
+
 
 // get customer data by cid (post method)
 app.post("/getcustomerinfo", function(req,res){
@@ -101,18 +110,26 @@ app.post("/savecustomerdata", function(req,res){
     })
 })
 
+// update feedback and followup date of customer using id
 app.post("/updatecustomer", function(req,res){
-    var feedback    = req.body.cfeedback;
-    // var oldfeedback = req.body.coldfeedback;
     var id          = req.body.cid;
-    var  sql = "update customer set feedback='"+feedback+"'  where cid='"+id+"' ";
+    var feedback    = req.body.cfeedback;
+    var newdate     = req.body.cfollowup
+    var empid  = req.body.empid;
+    var sql = "insert into feedback( cid, employee, feedback, followup ) values('"+id+"', '"+empid+"',  '"+feedback+"', '"+newdate+"'  )"
+    // var sql = "insert into feedback(id, employee feedback, followup ) values('"+id+"','"+feedback+"', '"+newdate+"' )"
+    // var  sql = "update customer set feedback='"+feedback+"'  where cid='"+id+"' ";
     mydatabase.query(sql, function(error, rows, fields){
         if(error) throw error
-        res.send(feedback +": Data updated Successfully  !");
+        res.send(" Feedback updated Successfully  !");
         res.end();
     })
 })
 
+
+// app.get("/getupdatedinfo", function(req,res){
+//     var sql ="select "
+// })
 
 // app.get("/employeedata", function(req,res){
 //    mydatabase.query('select * from employee', function(error, rows, fields){
