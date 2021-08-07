@@ -69,14 +69,14 @@ app.post("/customerdata", function(req,res){
 // })
 
 
-app.get("/getdata", function(req,res){
-    var sql = "select * from customer order by cid desc";
-    mydatabase.query(sql, function(error, rows,fields){
-        if(error) throw error
-        res.send(rows);
-        res.end();
-    })
-})
+// app.get("/getdata", function(req,res){
+//     var sql = "select * from customer order by cid desc";
+//     mydatabase.query(sql, function(error, rows,fields){
+//         if(error) throw error
+//         res.send(rows);
+//         res.end();
+//     })
+// })
 
 
 // get customer data by cid (post method)
@@ -97,11 +97,11 @@ app.post("/savecustomerdata", function(req,res){
     var location    = req.body.clocation;
     var mobile      = req.body.cmobile;
     var altmobile   = req.body.caltmobile;
-    var email      = req.body.cemail;
+    var email       = req.body.cemail;
     var university  = req.body.cuniversity;
     var course      = req.body.ccourse;
     var feedback    = req.body.cfeedback;
-    var empid  = req.body.empid;
+    var empid       = req.body.empid;
     var sql = "insert into customer(employee, name, location, mobile, altmobile, email, university, course, feedback ) values('"+empid+"', '"+name+"', '"+location+"', '"+mobile+"', '"+altmobile+"', '"+email+"', '"+university+"', '"+course+"', '"+feedback+"')";
     mydatabase.query(sql, function(error, rows, fields){
         if(error) throw error
@@ -110,15 +110,14 @@ app.post("/savecustomerdata", function(req,res){
     })
 })
 
-// update feedback and followup date of customer using id
-app.post("/updatecustomer", function(req,res){
+//update feedback and followup date of customer using id
+app.post("/postfeedback", function(req,res){
     var id          = req.body.cid;
     var feedback    = req.body.cfeedback;
     var newdate     = req.body.cfollowup
-    var empid  = req.body.empid;
-    var sql = "insert into feedback( cid, employee, feedback, followup ) values('"+id+"', '"+empid+"',  '"+feedback+"', '"+newdate+"'  )"
-    // var sql = "insert into feedback(id, employee feedback, followup ) values('"+id+"','"+feedback+"', '"+newdate+"' )"
-    // var  sql = "update customer set feedback='"+feedback+"'  where cid='"+id+"' ";
+    var empid       = req.body.empid;
+    var status      = req.body.cstatus;
+    var sql = "insert into feedback( cid, employee, feedback, followup, status ) values('"+id+"', '"+empid+"',  '"+feedback+"', '"+newdate+"', '"+status+"'  )"
     mydatabase.query(sql, function(error, rows, fields){
         if(error) throw error
         res.send(" Feedback updated Successfully  !");
@@ -127,17 +126,49 @@ app.post("/updatecustomer", function(req,res){
 })
 
 
-// app.get("/getupdatedinfo", function(req,res){
-//     var sql ="select "
-// })
+// get feedback from feedback table
+app.get("/feedback", function(req, res){
+    var sql = "select customer.*, feedback.* from feedback,customer where feedback.cid=customer.cid order by feedbackid desc";
+    mydatabase.query(sql, function(error, rows, fields){
+        if(error) throw error
+        res.send(rows);
+        res.end();
+    })
+})
 
-// app.get("/employeedata", function(req,res){
-//    mydatabase.query('select * from employee', function(error, rows, fields){
-//        if(error) throw error
-//        res.send(JSON.stringify(rows));
-//        res.end()
-//    })
-// })
+app.post("/postlead", function(req,res){
+    var id          = req.body.cid;
+    var feedback    = req.body.cfeedback;
+    var newdate     = req.body.cfollowup
+    var empid       = req.body.empid;
+    var status      = req.body.cstatus;
+    var sql = "insert into newlead( cid, employee, feedback, followup ) values('"+id+"', '"+empid+"',  '"+feedback+"', '"+newdate+"'  )";
+    mydatabase.query(sql, function(error, rows, fields){
+        var sql2 = "UPDATE customer cid="+id+";  SET status = 'done'";
+        mydatabase.query(sql2)
+        if(error) throw error
+        res.send(" Lead updated Successfully  !");
+        res.end();
+    })
+})
+
+app.post("/deletequery", function(req,res){
+    var sql = "DELETE FROM customer WHERE status = 'done'"
+    mydatabase.query(sql, function(error, rows, fields){
+        if(error) throw error
+        res.send("Success !");
+        res.end();
+    })
+})
+
+
+
+
+
+
+
+
+
 
 
 
