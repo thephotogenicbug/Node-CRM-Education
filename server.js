@@ -155,14 +155,26 @@ app.post("/postlead", function(req,res){
    
 })
 
-app.post("/deletequery", function(req,res){
-    var sql = "DELETE FROM customer WHERE status = 'done'"
+// app.post("/deletequery", function(req,res){
+//     var sql = "DELETE FROM customer WHERE status = 'done'"
+//     mydatabase.query(sql, function(error, rows, fields){
+//         if(error) throw error
+//         res.send("Success !");
+//         res.end();
+//     })
+// })
+
+
+app.post("/loginattendance", function(req,res){
+    var empid = req.body.empid;
+    var time  = req.body.time
+    var sql="insert into attendance(employee , login) values('"+empid+"', '"+time+"')";
     mydatabase.query(sql, function(error, rows, fields){
         if(error) throw error
-        res.send("Success !");
+        res.send("Attendance Submitted.. !");
         res.end();
     })
-})
+});
 
 
 
