@@ -136,33 +136,49 @@ app.post("/savecustomerdata", function(req,res){
 //     })
 // })
 
-app.post("/postlead", function(req,res){
+
+app.post("/postinterested", function(req,res){
+    var name       =  req.body.cname;
+    var mobile     =  req.body.cmobile;
+    var altmobile  =  req.body.caltmobile;
+    var email      =  req.body.cemail;
+    var course     =  req.body.ccourse;
+    var university =  req.body.cuniversity;
     var id          = req.body.cid;
     var feedback    = req.body.cfeedback;
-    var newdate     = req.body.cfollowup
     var empid       = req.body.empid;
-    var status      = req.body.cstatus;
-    var sql = "insert into newlead( cid, employee, feedback, followup ) values('"+id+"', '"+empid+"',  '"+feedback+"', '"+newdate+"'  )";
+    var newdate     = req.body.cfollowup
+    var sql = "insert into interested(name, mobile, altmobile, email, course, university, cid, employee, feedback, followup ) values('"+name+"', '"+mobile+"', '"+altmobile+"', '"+email+"', '"+course+"', '"+university+"', '"+id+"', '"+empid+"',  '"+feedback+"', '"+newdate+"'  )";
     mydatabase.query(sql, function(error, rows, fields){
         var sql2 = "update customer set status = 'done' where cid='"+id+"'  ";
         mydatabase.query(sql2)
         mydatabase.query("delete from customer where cid='"+id+"';")
         if(error) throw error
-        res.send(" Lead updated Successfully  !");
+        res.send(" Interested updated Successfully...  !");
         res.end();
       
     })
    
 })
 
-// app.post("/deletequery", function(req,res){
-//     var sql = "DELETE FROM customer WHERE status = 'done'"
-//     mydatabase.query(sql, function(error, rows, fields){
-//         if(error) throw error
-//         res.send("Success !");
-//         res.end();
-//     })
-// })
+app.post("/postrnr", function(req,res){
+    var id          = req.body.cid;
+    var feedback    = req.body.cfeedback;
+    var empid       = req.body.empid;
+    var newdate     = req.body.cfollowup
+    var sql ="insert into rnr(cid, employee, feedback, followup)values('"+id+"', '"+empid+"', '"+feedback+"', '"+newdate+"')";
+    mydatabase.query(sql, function(error, rows, fields){
+        var sql2 = "update customer set status = 'done' where cid='"+id+"'  ";
+        mydatabase.query(sql2)
+        mydatabase.query("delete from customer where cid='"+id+"';")
+        if(error) throw error
+        res.send(" RNR updated Successfully... !");
+        res.end();
+      
+    })
+
+})
+
 
 
 app.post("/loginattendance", function(req,res){
